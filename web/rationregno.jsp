@@ -1,0 +1,33 @@
+<%@ page language="java" import="java.sql.*" %>
+<% response.setContentType("text/html");%>
+<%
+String temp=request.getParameter("queryString");
+try 
+{
+                   HttpSession nagarpalika=request.getSession();
+                   String database=nagarpalika.getAttribute("database").toString();
+                   String username=nagarpalika.getAttribute("username").toString();
+                   String password=nagarpalika.getAttribute("password").toString();
+                   String emp_name=nagarpalika.getAttribute("emp_name").toString();
+
+String connectionURL = "jdbc:mysql://";
+Connection con;
+Class.forName("com.mysql.jdbc.Driver");
+// Get a Connection to the database
+con = DriverManager.getConnection("jdbc:mysql://mysql3000.mochahost.com:3306/"+database+"", ""+username+"", ""+password+""); 
+//Add the data into the database
+String sql = "SELECT max(regno) FROM rccandform1 WHERE zone = '"+temp+"'";
+Statement stm = con.createStatement();
+stm.executeQuery(sql);
+ResultSet rs= stm.getResultSet();
+//out.print("<select name = \"zone\" id=\"zone\"  onblur=\"lookup2(this.value);\">");
+while (rs.next ()){
+    int regno=rs.getInt(1);
+    regno+=1;
+out.print(regno);
+}
+//out.print("</select>");
+}catch(Exception e){
+out.println("Exception is ;"+e);
+}
+%>
